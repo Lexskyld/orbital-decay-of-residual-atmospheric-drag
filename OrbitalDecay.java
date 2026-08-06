@@ -13,7 +13,7 @@ StringBuilder csvContent = new StringBuilder("Day,Altitude\n");
     double R = R_Earth + Altitude;
     double time = 0;
     double DistanceTime = 1000;
-
+    
 System.out.println ("| Day |  Altitude (km)  |  Velocity (m/s)  |  Density (kg/m3)  |");
 System.out.println ("-----------------------------------------------------------------");
 
