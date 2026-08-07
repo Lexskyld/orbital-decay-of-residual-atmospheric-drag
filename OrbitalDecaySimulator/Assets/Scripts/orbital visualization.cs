@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.IO; 
 using System.Collections.Generic; 
-public class orbitalvisualization
+public class orbitalvisualization : MonoBehaviour
 {
     [Header("Simulation Settings")] 
     public string csvFileName = "satellite_trajectory.csv";
@@ -17,6 +17,7 @@ public class orbitalvisualization
     private bool isLoaded = false;
     void Start() { 
         LoadTrajectoryData(); 
+    }
 
     void Update() { 
         if (!isLoaded || trajectoryPoints.Count == 0) return;
@@ -34,5 +35,14 @@ public class orbitalvisualization
         }
         int nextIndex = Mathf.Min(currentPointIndex + 1, trajectoryPoints.Count - 1); 
         Vector3 targetPosition = Vector3.Lerp(trajectoryPoints[currentPointIndex], trajectoryPoints[nextIndex], timer);
+
+         if (earthTransform != null) { 
+            earthTransform.position = Vector3.zero; 
+        } 
+        transform.position = targetPosition; 
+    }
+     void LoadTrajectoryData()
+    {
+        
     }
 }
