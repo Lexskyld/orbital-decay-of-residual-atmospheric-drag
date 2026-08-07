@@ -52,5 +52,30 @@ public class OrbitVisualizer : MonoBehaviour
         }
         transform.position = targetPosition;
     }
+     void LoadTrajectoryData()
+    {
+       
+        string filePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, csvFileName);
+
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError($"CSV data file missing at: {filePath}. Run your Java application first!");
+            return;
+        }
+
+        string[] lines = File.ReadAllLines(filePath);
+
+        
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+            string[] values = lines[i].Split(',');
+            if (values.Length >= 4)
+            {
+                
+                float x = Convert.ToSingle(values[1]) / spaceScale;
+                float y = Convert.ToSingle(values[2]) / spaceScale;
+                float z = Convert.ToSingle(values[3]) / spaceScale;
+
 
 }
