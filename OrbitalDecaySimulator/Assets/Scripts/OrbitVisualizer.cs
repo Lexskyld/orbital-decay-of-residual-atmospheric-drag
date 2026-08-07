@@ -1,0 +1,23 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class OrbitVisualizer : MonoBehaviour
+{
+    [Header("Simulation Settings")]
+    public string csvFileName="satellite_trajectory.csv";
+
+    [Tooltip("Scale down real-world meters to Unity units (e.g., 100,000 meters = 1 Unity unit)")]
+    public float spaceScale = 100000f;
+    public float playbackSpeed = 5f;
+
+    [Header("Scene References")]
+    public Transform earthTransform;
+
+    private List<Vector3> trajectoryPoints = new List<Vector3>();
+    private int currentPointIndex = 0;
+    private float timer = 0f;
+    private bool isLoaded = false;
+
+}
