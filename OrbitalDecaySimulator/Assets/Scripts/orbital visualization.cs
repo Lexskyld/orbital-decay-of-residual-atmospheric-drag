@@ -32,6 +32,7 @@ public class orbitalvisualization
                 return; 
             } 
         }
-    
+        int nextIndex = Mathf.Min(currentPointIndex + 1, trajectoryPoints.Count - 1); 
+        Vector3 targetPosition = Vector3.Lerp(trajectoryPoints[currentPointIndex], trajectoryPoints[nextIndex], timer);
     }
 }
