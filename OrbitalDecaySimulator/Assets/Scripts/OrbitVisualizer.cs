@@ -19,5 +19,28 @@ public class OrbitVisualizer : MonoBehaviour
     private int currentPointIndex = 0;
     private float timer = 0f;
     private bool isLoaded = false;
+    void Start()
+    {
+        LoadTrajectoryData();
+    }
+
+    void Update()
+    {
+        if (!isLoaded || trajectoryPoints.Count == 0) return;
+
+       
+        timer += Time.deltaTime * playbackSpeed;
+        if (timer >= 1f)
+        {
+            timer = 0f;
+            currentPointIndex++;
+            if (currentPointIndex >= trajectoryPoints.Count)
+            {
+                Debug.Log("Orbital Decay Simulation Finished! Satellite has re-entered atmosphere.");
+                isLoaded = false;
+                return;
+            }
+        }
+
 
 }
