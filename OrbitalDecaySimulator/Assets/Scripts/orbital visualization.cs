@@ -26,5 +26,12 @@ public class orbitalvisualization
             timer = 0f; 
             currentPointIndex++;
 
+    if (currentPointIndex >= trajectoryPoints.Count) { 
+                Debug.Log("Orbital Decay Simulation Finished! Satellite has re-entered atmosphere."); 
+                isLoaded = false; 
+                return; 
+            } 
+        }
+    
     }
 }
