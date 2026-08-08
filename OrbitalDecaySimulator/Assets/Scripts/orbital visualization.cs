@@ -43,6 +43,15 @@ public class orbitalvisualization : MonoBehaviour
     }
      void LoadTrajectoryData()
     {
-        
+        string filePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, csvFileName); 
+        if (!File.Exists(filePath)) { 
+            Debug.LogError($"CSV data file missing at: {filePath}. Run your Java application first!"); 
+            return; 
+        }
+    string[] lines = File.ReadAllLines(filePath); 
+        // Skip header index 0, read dataset lines 
+        for (int i = 1; i < lines.Length; i++) { 
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
     }
+}
 }
