@@ -63,7 +63,8 @@ public class orbitalvisualization : MonoBehaviour
                 float z = Convert.ToSingle(values[3]) / spaceScale;
 
                 trajectoryPoints.Add(new Vector3(x, z, y)); 
-            } 
-        }
-        }
-    
+                Debug.Log($"Successfully loaded {trajectoryPoints.Count} high-precision trajectory coordinates."); 
+                isLoaded = true; 
+        } 
+    }
+} 
