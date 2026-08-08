@@ -41,6 +41,28 @@ public static class Vector3D {
             return new Vector3D(-this.x, -this.y, -this.z);
         }
     }
+        public static class SpacecraftState {
+        private final Vector3D position;
+        private final Vector3D velocity;
+        private final double mass;
+        private final double area;
+        private final double time;
+
+        public SpacecraftState(Vector3D pos, Vector3D vel, double mass, double area, double time) {
+            this.position = pos;
+            this.velocity = vel;
+            this.mass = mass;
+            this.area = area;
+            this.time = time;
+        }
+
+        public Vector3D getPosition() { return position; }
+        public Vector3D getVelocity() { return velocity; }
+        public double getMass() { return mass; }
+        public double getArea() { return area; }
+        public double getTime() { return time; }
+        public double getAltitude() { return position.magnitude() - R_EARTH; }
+    }
 
 
 
