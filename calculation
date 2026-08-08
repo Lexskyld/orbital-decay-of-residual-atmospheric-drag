@@ -63,6 +63,10 @@ public static class Vector3D {
         public double getTime() { return time; }
         public double getAltitude() { return position.magnitude() - R_EARTH; }
     }
+     public interface ForceModel {
+        Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area);
+    }
+
 
 
 
