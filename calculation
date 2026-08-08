@@ -1,3 +1,17 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class OrbitalSimulation {
+
+
+    public static final double G = 6.67430e-11;
+    public static final double M_EARTH = 5.972e24;
+    public static final double MU = G * M_EARTH;
+    public static final double R_EARTH = 6371000.0;
 
 
 
