@@ -15,6 +15,8 @@ public class orbitalvisualization : MonoBehaviour
     private int currentPointIndex = 0; 
     private float timer = 0f; 
     private bool isLoaded = false;
+    private int i;
+
     void Start() { 
         LoadTrajectoryData(); 
     }
@@ -49,9 +51,16 @@ public class orbitalvisualization : MonoBehaviour
             return; 
         }
     string[] lines = File.ReadAllLines(filePath); 
-        // Skip header index 0, read dataset lines 
+
         for (int i = 1; i < lines.Length; i++) { 
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
     }
-}
+    string[] values = lines[i].Split(','); 
+            if (values.Length >= 4) { 
+
+                float x = Convert.ToSingle(values[1]) / spaceScale; 
+                float y = Convert.ToSingle(values[2]) / spaceScale; 
+                float z = Convert.ToSingle(values[3]) / spaceScale;
+        }
+    }
 }
