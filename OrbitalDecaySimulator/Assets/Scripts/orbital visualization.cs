@@ -61,6 +61,9 @@ public class orbitalvisualization : MonoBehaviour
                 float x = Convert.ToSingle(values[1]) / spaceScale; 
                 float y = Convert.ToSingle(values[2]) / spaceScale; 
                 float z = Convert.ToSingle(values[3]) / spaceScale;
+
+                trajectoryPoints.Add(new Vector3(x, z, y)); 
+            } 
         }
-    }
-}
+        }
+    
