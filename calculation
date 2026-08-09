@@ -171,6 +171,16 @@ Vector3D nextPos = p0.add(vk1.add(vk2.scale(2.0)).add(vk3.scale(2.0)).add(vk4).s
  PrintWriter csvWriter = null;
         try {
             csvWriter = new PrintWriter(new FileWriter("satellite_trajectory.csv"));
+            csvWriter.println("time,pos_x,pos_y,pos_z,velocity,altitude");
+        } catch (IOException e) {
+            System.err.println("cannot generate data！");
+        }
+
+        System.out.println("| Day |   Altitude (km)   |   Velocity (m/s)   |   X Coord (m)   |");
+        System.out.println("-----------------------------------------------------------------");
+        double dt = 10.0;
+        double lastPrintTime = -86400;
+
 
 
 
