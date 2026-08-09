@@ -137,5 +137,14 @@ public SpacecraftState propagateRK4(SpacecraftState state, double dt) {
 
 Vector3D vk1 = v0;
             Vector3D ak1 = getCombinedAcceleration(p0, vk1, m, a);
+ Vector3D pk2 = p0.add(vk1.scale(0.5 * dt));
+            Vector3D vk2 = v0.add(ak1.scale(0.5 * dt));
+            Vector3D ak2 = getCombinedAcceleration(pk2, vk2, m, a);
+Vector3D pk3 = p0.add(vk2.scale(0.5 * dt));
+            Vector3D vk3 = v0.add(ak2.scale(0.5 * dt));
+            Vector3D ak3 = getCombinedAcceleration(pk3, vk3, m, a);
+Vector3D pk4 = p0.add(vk3.scale(dt));
+            Vector3D vk4 = v0.add(ak3.scale(dt));
+            Vector3D ak4 = getCombinedAcceleration(pk4, vk4, m, a);
 
 
