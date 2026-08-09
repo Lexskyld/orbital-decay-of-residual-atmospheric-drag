@@ -101,6 +101,16 @@ public static class Vector3D {
             double forceMag = 0.5 * rho * v * v * cDrag * area;
         Vector3D dragDirection = vel.normalize().negate();
         return dragDirection.scale(forceMag / mass);
+        
+        private double findDensity(double h) {
+            double altKm = h / 1000.0;
+            if (altKm > 150) {
+                return 2.789e-10 * Math.exp(-(altKm - 200) / 37.5);
+            } else {
+                return 1.225 * Math.exp(-altKm / 8.5);
+            }
+        }
+    }
 
 
 
