@@ -118,6 +118,8 @@ public static class Vector3D {
         public void addForceModel(ForceModel force) {
             forces.add(force);
         }
-
+        public Vector3D getCombinedAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
+            double r = pos.magnitude();
+  
 
 
