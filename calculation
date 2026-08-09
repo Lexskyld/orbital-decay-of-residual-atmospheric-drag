@@ -67,6 +67,25 @@ public static class Vector3D {
         Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area);
     }
 
+ public static class J2Perturbation implements ForceModel {
+        private static final double J2 = 0.00108263;
+
+        @Override
+        public Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
+            double r = pos.magnitude();
+            double r3 = r * r * r;
+            double r5 = r3 * r * r;
+            double zSqOverRSq = (pos.z * pos.z) / (r * r);
+            
+            double commonFactor = 1.5 * J2 * MU * (R_EARTH * R_EARTH) / r5;
+
+            double ax = commonFactor * pos.x * (1.0 - 5.0 * zSqOverRSq);
+            double ay = commonFactor * pos.y * (1.0 - 5.0 * zSqOverRSq);
+            double az = commonFactor * pos.z * (3.0 - 5.0 * zSqOverRSq);
+
+            return new Vector3D(ax, ay, az);
+        }
+    }
 
 
 
