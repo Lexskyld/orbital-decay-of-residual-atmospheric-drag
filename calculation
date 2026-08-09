@@ -1,0 +1,215 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class OrbitalSimulation {
+
+
+public static final double G = 6.67430e-11;
+public static final double M_EARTH = 5.972e24;
+public static final double MU = G * M_EARTH;
+public static final double R_EARTH = 6371000.0;
+
+public static class Vector3D {
+    public final double x, y, z;
+
+public Vector3D(double x, double y, double z) {
+    this.x = x; this.y = y; this.z = z;
+}
+
+public double magnitude() {
+    return Math.sqrt(x * x + y * y + z * z);
+}
+
+public Vector3D add(Vector3D v) {
+    return new Vector3D(this.x + v.x, this.y + v.y, this.z + v.z);
+}
+
+public Vector3D scale(double factor) {
+    return new Vector3D(this.x * factor, this.y * factor, this.z * factor);
+}
+
+public Vector3D normalize() {
+    double mag = magnitude();
+    return mag == 0 ? new Vector3D(0, 0, 0) : this.scale(1.0 / mag);
+}
+
+public Vector3D negate() {
+    return new Vector3D(-this.x, -this.y, -this.z);
+    }
+
+}
+public static class SpacecraftState {
+private final Vector3D position;
+private final Vector3D velocity;
+private final double mass;
+private final double area;
+private final double time;
+
+    public SpacecraftState(Vector3D pos, Vector3D vel, double mass, double area, double time) {
+    this.position = pos;
+    this.velocity = vel;
+    this.mass = mass;
+    this.area = area;
+    this.time = time;
+}
+
+    public Vector3D getPosition() { return position; }
+    public Vector3D getVelocity() { return velocity; }
+    public double getMass() { return mass; }
+    public double getArea() { return area; }
+    public double getTime() { return time; }
+    public double getAltitude() { return position.magnitude() - R_EARTH; }
+}
+
+    public interface ForceModel {
+        Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area);
+    }
+
+public static class J2Perturbation implements ForceModel {
+private static final double J2 = 0.00108263;
+
+@Override
+public Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
+    double r = pos.magnitude();
+    double r3 = r * r * r;
+    double r5 = r3 * r * r;
+    double zSqOverRSq = (pos.z * pos.z) / (r * r);
+            
+    double commonFactor = 1.5 * J2 * MU * (R_EARTH * R_EARTH) / r5;
+
+    double ax = commonFactor * pos.x * (1.0 - 5.0 * zSqOverRSq);
+    double ay = commonFactor * pos.y * (1.0 - 5.0 * zSqOverRSq);
+    double az = commonFactor * pos.z * (3.0 - 5.0 * zSqOverRSq);
+
+            return new Vector3D(ax, ay, az);
+        }
+    }
+public static class AtmosphericDrag implements ForceModel {
+private final double cDrag;
+
+public AtmosphericDrag(double cDrag) {
+        this.cDrag = cDrag;
+    }
+
+@Override
+public Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
+    double altitude = pos.magnitude() - R_EARTH;
+    double rho = findDensity(altitude);
+    double v = vel.magnitude();
+    double forceMag = 0.5 * rho * v * v * cDrag * area;
+        Vector3D dragDirection = vel.normalize().negate();
+        return dragDirection.scale(forceMag / mass);
+}
+ private double findDensity(double h) {
+    double altKm = h / 1000.0;
+    if (altKm > 150) {
+        return 2.789e-10 * Math.exp(-(altKm - 200) / 37.5);
+    } 
+
+    else 
+    {
+    return 1.225 * Math.exp(-altKm / 8.5);
+        }
+    }
+}
+
+public static class NumericalPropagator {
+private final List<ForceModel> forces = new ArrayList<>();
+
+public void addForceModel(ForceModel force) {
+        forces.add(force);
+    }
+public Vector3D getCombinedAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
+        double r = pos.magnitude();
+
+        Vector3D baseGravity = pos.scale(-MU / (r * r * r));
+
+        Vector3D totalAcc = baseGravity;
+            for (ForceModel force : forces) {
+                totalAcc = totalAcc.add(force.calculateAcceleration(pos, vel, mass, area));
+            }
+            return totalAcc;
+        }
+public SpacecraftState propagateRK4(SpacecraftState state, double dt) {
+        Vector3D p0 = state.getPosition();
+        Vector3D v0 = state.getVelocity();
+        double m = state.getMass();
+        double a = state.getArea();
+
+Vector3D vk1 = v0;
+            Vector3D ak1 = getCombinedAcceleration(p0, vk1, m, a);
+ Vector3D pk2 = p0.add(vk1.scale(0.5 * dt));
+            Vector3D vk2 = v0.add(ak1.scale(0.5 * dt));
+            Vector3D ak2 = getCombinedAcceleration(pk2, vk2, m, a);
+Vector3D pk3 = p0.add(vk2.scale(0.5 * dt));
+            Vector3D vk3 = v0.add(ak2.scale(0.5 * dt));
+            Vector3D ak3 = getCombinedAcceleration(pk3, vk3, m, a);
+Vector3D pk4 = p0.add(vk3.scale(dt));
+            Vector3D vk4 = v0.add(ak3.scale(dt));
+            Vector3D ak4 = getCombinedAcceleration(pk4, vk4, m, a);
+
+Vector3D nextPos = p0.add(vk1.add(vk2.scale(2.0)).add(vk3.scale(2.0)).add(vk4).scale(dt / 6.0));
+            Vector3D nextVel = v0.add(ak1.add(ak2.scale(2.0)).add(ak3.scale(2.0)).add(ak4).scale(dt / 6.0));
+
+            return new SpacecraftState(nextPos, nextVel, m, a, state.getTime() + dt);
+        }
+    }
+
+ public static void main(String[] args) {
+        double mSatellite = 5.00;
+        double aSatellite = 1.0;
+        double cDrag = 2.2;
+        double initialAltitude = 400000.0; 
+        double rStart = R_EARTH + initialAltitude;
+        double vStart = Math.sqrt(MU / rStart);
+    Vector3D initPos = new Vector3D(rStart, 0.0, 0.0);
+    Vector3D initVel = new Vector3D(0.0, vStart * Math.cos(Math.toRadians(45)), vStart * Math.sin(Math.toRadians(45)));
+    SpacecraftState state = new SpacecraftState(initPos, initVel, mSatellite, aSatellite, 0.0);
+    
+    NumericalPropagator propagator = new NumericalPropagator();
+        propagator.addForceModel(new AtmosphericDrag(cDrag));           
+           propagator.addForceModel(new J2Perturbation());    
+ PrintWriter csvWriter = null;
+        try {
+            csvWriter = new PrintWriter(new FileWriter("satellite_trajectory.csv"));
+            csvWriter.println("time,pos_x,pos_y,pos_z,velocity,altitude");
+        } catch (IOException e) {
+            System.err.println("cannot generate data！");
+        }
+
+        System.out.println("| Day |   Altitude (km)   |   Velocity (m/s)   |   X Coord (m)   |");
+        System.out.println("-----------------------------------------------------------------");
+        double dt = 10.0;
+        double lastPrintTime = -86400;
+while (state.getAltitude() > 150000.0) 
+    {
+        state = propagator.propagateRK4(state, dt);
+            if (csvWriter != null && (int)(state.getTime() / dt) % 10 == 0) {
+                Vector3D p = state.getPosition();
+                csvWriter.printf("%.1f,%.4f,%.4f,%.4f,%.4f,%.4f\n", 
+                state.getTime(), p.x, p.y, p.z, state.getVelocity().magnitude(), state.getAltitude());
+            }
+            if (state.getTime() - lastPrintTime >= 86400.0) {
+                System.out.printf("| %-3.0f | %-17.6f | %-18.2f | %-15.1f |\n",
+                        state.getTime() / 86400.0, 
+                        state.getAltitude() / 1000.0, 
+                        state.getVelocity().magnitude(),
+                        state.getPosition().x);
+                lastPrintTime = state.getTime();
+            }
+        }
+
+        System.out.println("-----------------------------------------------------------------");
+        System.out.printf("The projected life of orbit is : %.2f days\n", state.getTime() / 86400.0);
+
+        if (csvWriter != null) {
+            csvWriter.close();
+            System.out.println(" Success! See data output'satellite_trajectory.csv' ");
+        }
+    }
+}
+
