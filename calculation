@@ -99,6 +99,9 @@ public static class Vector3D {
             double rho = findDensity(altitude);
             double v = vel.magnitude();
             double forceMag = 0.5 * rho * v * v * cDrag * area;
+        Vector3D dragDirection = vel.normalize().negate();
+        return dragDirection.scale(forceMag / mass);
+
 
 
 
