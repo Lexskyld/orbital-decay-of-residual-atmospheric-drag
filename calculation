@@ -8,39 +8,40 @@ import java.util.List;
 public class OrbitalSimulation {
 
 
-    public static final double G = 6.67430e-11;
-    public static final double M_EARTH = 5.972e24;
-    public static final double MU = G * M_EARTH;
-    public static final double R_EARTH = 6371000.0;
+public static final double G = 6.67430e-11;
+public static final double M_EARTH = 5.972e24;
+public static final double MU = G * M_EARTH;
+public static final double R_EARTH = 6371000.0;
 
 public static class Vector3D {
-        public final double x, y, z;
+    public final double x, y, z;
 
 public Vector3D(double x, double y, double z) {
-            this.x = x; this.y = y; this.z = z;
-        }
+    this.x = x; this.y = y; this.z = z;
+}
 
 public double magnitude() {
-            return Math.sqrt(x * x + y * y + z * z);
-        }
+    return Math.sqrt(x * x + y * y + z * z);
+}
 
 public Vector3D add(Vector3D v) {
-            return new Vector3D(this.x + v.x, this.y + v.y, this.z + v.z);
-        }
+    return new Vector3D(this.x + v.x, this.y + v.y, this.z + v.z);
+}
 
 public Vector3D scale(double factor) {
-            return new Vector3D(this.x * factor, this.y * factor, this.z * factor);
-        }
+    return new Vector3D(this.x * factor, this.y * factor, this.z * factor);
+}
 
 public Vector3D normalize() {
-            double mag = magnitude();
-            return mag == 0 ? new Vector3D(0, 0, 0) : this.scale(1.0 / mag);
-        }
+    double mag = magnitude();
+    return mag == 0 ? new Vector3D(0, 0, 0) : this.scale(1.0 / mag);
+}
 
 public Vector3D negate() {
-            return new Vector3D(-this.x, -this.y, -this.z);
-        }
+    return new Vector3D(-this.x, -this.y, -this.z);
     }
+
+}
 public static class SpacecraftState {
 private final Vector3D position;
 private final Vector3D velocity;
