@@ -135,5 +135,7 @@ public SpacecraftState propagateRK4(SpacecraftState state, double dt) {
             double m = state.getMass();
             double a = state.getArea();
 
+Vector3D vk1 = v0;
+            Vector3D ak1 = getCombinedAcceleration(p0, vk1, m, a);
 
 
