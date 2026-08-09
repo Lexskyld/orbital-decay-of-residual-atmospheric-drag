@@ -50,12 +50,12 @@ private final double area;
 private final double time;
 
     public SpacecraftState(Vector3D pos, Vector3D vel, double mass, double area, double time) {
-            this.position = pos;
-            this.velocity = vel;
-            this.mass = mass;
-            this.area = area;
-            this.time = time;
-        }
+    this.position = pos;
+    this.velocity = vel;
+    this.mass = mass;
+    this.area = area;
+    this.time = time;
+}
 
     public Vector3D getPosition() { return position; }
     public Vector3D getVelocity() { return velocity; }
@@ -63,8 +63,9 @@ private final double time;
     public double getArea() { return area; }
     public double getTime() { return time; }
     public double getAltitude() { return position.magnitude() - R_EARTH; }
-    }
-public interface ForceModel {
+}
+
+    public interface ForceModel {
         Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area);
     }
 
@@ -73,16 +74,16 @@ private static final double J2 = 0.00108263;
 
 @Override
 public Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
-            double r = pos.magnitude();
-            double r3 = r * r * r;
-            double r5 = r3 * r * r;
-            double zSqOverRSq = (pos.z * pos.z) / (r * r);
+    double r = pos.magnitude();
+    double r3 = r * r * r;
+    double r5 = r3 * r * r;
+    double zSqOverRSq = (pos.z * pos.z) / (r * r);
             
-            double commonFactor = 1.5 * J2 * MU * (R_EARTH * R_EARTH) / r5;
+    double commonFactor = 1.5 * J2 * MU * (R_EARTH * R_EARTH) / r5;
 
-            double ax = commonFactor * pos.x * (1.0 - 5.0 * zSqOverRSq);
-            double ay = commonFactor * pos.y * (1.0 - 5.0 * zSqOverRSq);
-            double az = commonFactor * pos.z * (3.0 - 5.0 * zSqOverRSq);
+    double ax = commonFactor * pos.x * (1.0 - 5.0 * zSqOverRSq);
+    double ay = commonFactor * pos.y * (1.0 - 5.0 * zSqOverRSq);
+    double az = commonFactor * pos.z * (3.0 - 5.0 * zSqOverRSq);
 
             return new Vector3D(ax, ay, az);
         }
@@ -91,50 +92,53 @@ public static class AtmosphericDrag implements ForceModel {
 private final double cDrag;
 
 public AtmosphericDrag(double cDrag) {
-            this.cDrag = cDrag;
-        }
+        this.cDrag = cDrag;
+    }
 
 @Override
 public Vector3D calculateAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
-            double altitude = pos.magnitude() - R_EARTH;
-            double rho = findDensity(altitude);
-            double v = vel.magnitude();
-            double forceMag = 0.5 * rho * v * v * cDrag * area;
+    double altitude = pos.magnitude() - R_EARTH;
+    double rho = findDensity(altitude);
+    double v = vel.magnitude();
+    double forceMag = 0.5 * rho * v * v * cDrag * area;
         Vector3D dragDirection = vel.normalize().negate();
         return dragDirection.scale(forceMag / mass);
 
  private double findDensity(double h) {
-            double altKm = h / 1000.0;
-            if (altKm > 150) {
-                return 2.789e-10 * Math.exp(-(altKm - 200) / 37.5);
-            } else {
-                return 1.225 * Math.exp(-altKm / 8.5);
-            }
+    double altKm = h / 1000.0;
+    if (altKm > 150) {
+        return 2.789e-10 * Math.exp(-(altKm - 200) / 37.5);
+    } 
+
+    else 
+    {
+    return 1.225 * Math.exp(-altKm / 8.5);
         }
     }
+}
 
 public static class NumericalPropagator {
 private final List<ForceModel> forces = new ArrayList<>();
 
 public void addForceModel(ForceModel force) {
-            forces.add(force);
-        }
+        forces.add(force);
+    }
 public Vector3D getCombinedAcceleration(Vector3D pos, Vector3D vel, double mass, double area) {
-            double r = pos.magnitude();
+        double r = pos.magnitude();
 
-         Vector3D baseGravity = pos.scale(-MU / (r * r * r));
+        Vector3D baseGravity = pos.scale(-MU / (r * r * r));
 
-            Vector3D totalAcc = baseGravity;
+        Vector3D totalAcc = baseGravity;
             for (ForceModel force : forces) {
                 totalAcc = totalAcc.add(force.calculateAcceleration(pos, vel, mass, area));
             }
             return totalAcc;
         }
 public SpacecraftState propagateRK4(SpacecraftState state, double dt) {
-            Vector3D p0 = state.getPosition();
-            Vector3D v0 = state.getVelocity();
-            double m = state.getMass();
-            double a = state.getArea();
+        Vector3D p0 = state.getPosition();
+        Vector3D v0 = state.getVelocity();
+        double m = state.getMass();
+        double a = state.getArea();
 
 Vector3D vk1 = v0;
             Vector3D ak1 = getCombinedAcceleration(p0, vk1, m, a);
