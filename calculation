@@ -180,7 +180,31 @@ Vector3D nextPos = p0.add(vk1.add(vk2.scale(2.0)).add(vk3.scale(2.0)).add(vk4).s
         System.out.println("-----------------------------------------------------------------");
         double dt = 10.0;
         double lastPrintTime = -86400;
+while (state.getAltitude() > 150000.0) 
+    {
+        state = propagator.propagateRK4(state, dt);
+            if (csvWriter != null && (int)(state.getTime() / dt) % 10 == 0) {
+                Vector3D p = state.getPosition();
+                csvWriter.printf("%.1f,%.4f,%.4f,%.4f,%.4f,%.4f\n", 
+                state.getTime(), p.x, p.y, p.z, state.getVelocity().magnitude(), state.getAltitude());
+            }
+            if (state.getTime() - lastPrintTime >= 86400.0) {
+                System.out.printf("| %-3.0f | %-17.6f | %-18.2f | %-15.1f |\n",
+                        state.getTime() / 86400.0, 
+                        state.getAltitude() / 1000.0, 
+                        state.getVelocity().magnitude(),
+                        state.getPosition().x);
+                lastPrintTime = state.getTime();
+            }
+        }
 
+        System.out.println("-----------------------------------------------------------------");
+        System.out.printf("The projected life of orbit is : %.2f days\n", state.getTime() / 86400.0);
 
-
+        if (csvWriter != null) {
+            csvWriter.close();
+            System.out.println(" Success! See data output'satellite_trajectory.csv' ");
+        }
+    }
+}
 
