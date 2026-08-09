@@ -162,5 +162,8 @@ Vector3D nextPos = p0.add(vk1.add(vk2.scale(2.0)).add(vk3.scale(2.0)).add(vk4).s
         double rStart = R_EARTH + initialAltitude;
         double vStart = Math.sqrt(MU / rStart);
 Vector3D initPos = new Vector3D(rStart, 0.0, 0.0);
+ Vector3D initVel = new Vector3D(0.0, vStart * Math.cos(Math.toRadians(45)), vStart * Math.sin(Math.toRadians(45)));
+    SpacecraftState state = new SpacecraftState(initPos, initVel, mSatellite, aSatellite, 0.0);
+
 
 
