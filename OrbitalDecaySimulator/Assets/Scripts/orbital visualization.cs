@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 using System.IO;
-using System.Globalization; 
+using System.Globalization;
 using System.Collections.Generic;
 
 public class orbitalvisualization : MonoBehaviour
@@ -23,6 +23,13 @@ public class orbitalvisualization : MonoBehaviour
     void Start()
     {
         LoadTrajectoryData();
+        
+        // AUTO-CAMERA SETUP: Pulls the main camera back to see the wide orbit paths perfectly
+        if (Camera.main != null)
+        {
+            Camera.main.transform.position = new Vector3(0f, 40f, -150f);
+            Camera.main.transform.LookAt(Vector3.zero);
+        }
     }
 
     void Update()
@@ -49,7 +56,14 @@ public class orbitalvisualization : MonoBehaviour
         {
             earthTransform.position = Vector3.zero;
         }
+        
         transform.position = targetPosition;
+
+
+        if (currentPointIndex % 100 == 0 && timer == 0f)
+        {
+            Debug.Log($"Satellite Live Coordinates -> X: {transform.position.x:F2}, Y: {transform.position.y:F2}, Z: {transform.position.z:F2}");
+        }
     }
 
     void LoadTrajectoryData()
@@ -73,10 +87,12 @@ public class orbitalvisualization : MonoBehaviour
             {
                 try
                 {
+
                     float x = Convert.ToSingle(values[1], CultureInfo.InvariantCulture) / spaceScale;
                     float y = Convert.ToSingle(values[2], CultureInfo.InvariantCulture) / spaceScale;
                     float z = Convert.ToSingle(values[3], CultureInfo.InvariantCulture) / spaceScale;
 
+ 
                     trajectoryPoints.Add(new Vector3(x, z, y));
                 }
                 catch (Exception e)
