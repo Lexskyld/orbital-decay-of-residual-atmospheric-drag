@@ -266,15 +266,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6694468348056204606, guid: 95cb9745d0f90ed4cb2976ad2147b05d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.2547036
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6694468348056204606, guid: 95cb9745d0f90ed4cb2976ad2147b05d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.48
+      value: 20.74
       objectReference: {fileID: 0}
     - target: {fileID: 6694468348056204606, guid: 95cb9745d0f90ed4cb2976ad2147b05d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.66
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6694468348056204606, guid: 95cb9745d0f90ed4cb2976ad2147b05d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -550,7 +550,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 40, y: 40, z: 40}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -622,8 +622,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::orbitalvisualization
   csvFileName: satellite_trajectory.csv
-  spaceScale: 10
-  playbackSpeed: 0.05
+  spaceScale: 100000
+  playbackSpeed: 100
   earthTransform: {fileID: 420533512}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
