@@ -84,10 +84,10 @@ public class orbitalvisualization : MonoBehaviour
             {
                 try
                 {
+                  float x = Convert.ToSingle(values[1], CultureInfo.InvariantCulture) / spaceScale;
+                  float y = Convert.ToSingle(values[2], CultureInfo.InvariantCulture) / spaceScale;
+                  float z = Convert.ToSingle(values[3], CultureInfo.InvariantCulture) / spaceScale;
 
-                    float x = Convert.ToSingle(values[1], CultureInfo.InvariantCulture) / spaceScale;
-                    float y = Convert.ToSingle(values[2], CultureInfo.InvariantCulture) / spaceScale;
-                    float z = Convert.ToSingle(values[3], CultureInfo.InvariantCulture) / spaceScale;
 
  
                     trajectoryPoints.Add(new Vector3(x, z, y));
