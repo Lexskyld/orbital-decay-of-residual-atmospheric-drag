@@ -22,9 +22,7 @@ public class orbitalvisualization : MonoBehaviour
 
     void Start()
     {
-        LoadTrajectoryData();
-        
-        // AUTO-CAMERA SETUP: Pulls the main camera back to see the wide orbit paths perfectly
+       LoadTrajectoryData();
         if (Camera.main != null)
         {
             Camera.main.transform.position = new Vector3(0f, 40f, -150f);
@@ -65,8 +63,7 @@ public class orbitalvisualization : MonoBehaviour
             Debug.Log($"Satellite Live Coordinates -> X: {transform.position.x:F2}, Y: {transform.position.y:F2}, Z: {transform.position.z:F2}");
         }
     }
-
-    void LoadTrajectoryData()
+        void LoadTrajectoryData()
     {
         string filePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, csvFileName);
 
