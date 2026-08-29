@@ -31,31 +31,31 @@ public class orbitalvisualization : MonoBehaviour
     }
 
     void Update()
+{
+    if (!isLoaded || trajectoryPoints.Count == 0) return;
+
+    timer += Time.deltaTime * playbackSpeed;
+
+    if (timer >= 1f)
     {
-        if (!isLoaded || trajectoryPoints.Count == 0) return;
+        timer = 0f;
+        currentPointIndex++;
 
-        timer += Time.deltaTime * playbackSpeed;
-        if (timer >= 1f)
+        if (currentPointIndex >= trajectoryPoints.Count)
         {
-            timer = 0f;
-            currentPointIndex++;
-            if (currentPointIndex >= trajectoryPoints.Count)
-            {
-                Debug.Log("Orbital Decay Simulation Finished! Satellite has re-entered atmosphere.");
-                isLoaded = false;
-                return;
-            }
+            Debug.Log("Orbital Decay Simulation Finished! Satellite has re-entered atmosphere.");
+            isLoaded = false;
+            return;
         }
+    }
 
-        int nextIndex = Mathf.Min(currentPointIndex + 1, trajectoryPoints.Count - 1);
-        Vector3 targetPosition = Vector3.Lerp(trajectoryPoints[currentPointIndex], trajectoryPoints[nextIndex], timer);
+    int nextIndex = Mathf.Min(currentPointIndex + 1, trajectoryPoints.Count - 1);
 
-        if (earthTransform != null)
-        {
-            earthTransform.position = Vector3.zero;
-        }
-        
-        transform.position = targetPosition;
+    Vector3 targetPosition = Vector3.Lerp(trajectoryPoints[currentPointIndex], trajectoryPoints[nextIndex], timer);
+
+
+    transform.position = targetPosition;
+
 
 
         if (currentPointIndex % 100 == 0 && timer == 0f)
