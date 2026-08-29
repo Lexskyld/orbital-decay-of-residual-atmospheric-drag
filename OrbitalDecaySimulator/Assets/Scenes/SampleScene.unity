@@ -495,6 +495,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &527152725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: b566ce7283e47f741b0fa467b5b72884, type: 3}
+  m_PrefabInstance: {fileID: 1566086864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &527152727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527152725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8331fb692c176d74f882b8ade41b4fd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::orbitalvisualization
+  csvFileName: satellite_trajectory.csv
+  spaceScale: 100000
+  playbackSpeed: 300
+  earthTransform: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,7 +696,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: b566ce7283e47f741b0fa467b5b72884, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 527152727}
   m_SourcePrefab: {fileID: 100100000, guid: b566ce7283e47f741b0fa467b5b72884, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
