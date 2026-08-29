@@ -21,14 +21,26 @@ public class orbitalvisualization : MonoBehaviour
     private bool isLoaded = false;
 
     void Start()
+{
+    LoadTrajectoryData();
+    if (trajectoryPoints.Count > 0)
     {
-       LoadTrajectoryData();
-        if (Camera.main != null)
-        {
-            Camera.main.transform.position = new Vector3(0f, 40f, -150f);
-            Camera.main.transform.LookAt(Vector3.zero);
-        }
+        transform.position = trajectoryPoints[0];
     }
+    TrailRenderer trail = GetComponent<TrailRenderer>();
+    if (trail != null)
+    {
+        trail.Clear();
+        trail.emitting = true; 
+    }
+
+    if (Camera.main != null)
+    {
+        Camera.main.transform.position = new Vector3(0f, 40f, -150f);
+        Camera.main.transform.LookAt(Vector3.zero);
+    }
+}
+
 
     void LateUpdate() 
 {
