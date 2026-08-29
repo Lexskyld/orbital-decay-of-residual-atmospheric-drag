@@ -30,7 +30,7 @@ public class orbitalvisualization : MonoBehaviour
         }
     }
 
-    void Update()
+    void LateUpdate() 
 {
     if (!isLoaded || trajectoryPoints.Count == 0) return;
 
@@ -50,9 +50,12 @@ public class orbitalvisualization : MonoBehaviour
     }
 
     int nextIndex = Mathf.Min(currentPointIndex + 1, trajectoryPoints.Count - 1);
-
     Vector3 targetPosition = Vector3.Lerp(trajectoryPoints[currentPointIndex], trajectoryPoints[nextIndex], timer);
 
+    if (earthTransform != null)
+    {
+        earthTransform.position = Vector3.zero;
+    }
 
     transform.position = targetPosition;
 
