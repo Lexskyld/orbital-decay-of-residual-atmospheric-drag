@@ -5382,7 +5382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::orbitalvisualization
   csvFileName: satellite_trajectory.csv
   spaceScale: 100000
-  playbackSpeed: 500
+  playbackSpeed: 90000
   earthTransform: {fileID: 0}
 --- !u!96 &527152728
 TrailRenderer:
