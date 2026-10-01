@@ -1,1 +1,208 @@
+Calculate the g value at different altitudes:
+
+public class AerospacePhysics { 
+        public static void main(String[] args) {
+                   double G = 6.67430e-11; 
+                   double earthMass = 5.972e24; 
+                   double earthRadius = 6371000; 
+                   double g = (G * earthMass) / Math.pow(earthRadius, 2);
+                   System.out.println("the value of the acceleration on earth is: " + g + " m/s^2");                
+                   double ISS_Altitude = 400000; 
+                   double g_ISS = (G * earthMass) / Math.pow(earthRadius + ISS_Altitude, 2);
+                   System.out.println("the acceleration on the space station (400km above the surface of earth) is: " + g_ISS + " m/s^2");
+    }
+}
+
+Calculate g as the altitude of an object is changing:
+
+public class Main {
+    public static void main(String[] args) {
+        double G = 6.67430e-11;
+        double earthMass = 5.972e24;
+        double earthRadius = 6371000;
+        double altitude = 100000; 
+
+        double velocity = 0;      
+        double time = 0;          
+        double dt = 0.1;          
+        System.out.println("time(s) | altitude(m) | velocity(m/s) | current g(m/s^2)");
+        System.out.println("----------------------------------------------");
+      
+        while (altitude > 0) {
+            double r = earthRadius + altitude;
+            double a = (G * earthMass) / Math.pow(r, 2);
+            velocity = velocity + a * dt;
+            altitude = altitude - velocity * dt;
+            time += dt;
+            
+            if (Math.round(time * 10) % 200 == 0) {
+                System.out.printf("%.1f    | %.1f  | %.2f     | %.4f\n", time, altitude, velocity, a);
+            }
+        }
+        System.out.println("----------------------------------------------");
+        System.out.printf("The object has landed！total time: %.1f s，final velocity: %.2f m/s\n", time, velocity);
+    }
+}
+
+Calculate g as drag force is included:
+
+public class Main {
+    public static void main(String[] args) {
+        double G = 6.67430e-11;
+        double earthMass = 5.972e24;
+        double earthRadius = 6371000;
+        
+        double rho = 1.225;  
+        double Cd = 0.47;   
+        double area = 3.14;  
+        double mass = 100;   
+        
+        double altitude = 100000; 
+        double velocity = 0;      
+        double time = 0;          
+        double dt = 0.1;          
+
+        System.out.println("time(s) | altitude(m) | velocity(m/s) | drag force(N)");
+        System.out.println("----------------------------------------------");
+
+        while (altitude > 0) {
+            double r = earthRadius + altitude;
+
+            double a_gravity = (G * earthMass) / Math.pow(r, 2);
+
+            Fd = 0.5 * rho * v^2 * Cd * A
+            double dragForce = 0.5 * rho * Math.pow(velocity, 2) * Cd * area;
+            double a_drag = dragForce / mass; 
+            
+            double a_net = a_gravity - a_drag;
+
+            velocity = velocity + a_net * dt;
+            altitude = altitude - velocity * dt;
+            time += dt;
+
+            if (Math.round(time * 10) % 1000 == 0) {
+                System.out.printf("%.1f    | %.1f    | %.2f        |   %.2f\n", time, altitude, velocity, dragForce);
+            }
+        }
+        System.out.println("----------------------------------------------");
+        System.out.printf("The object has landed！Final velocity: %.2f m/s (约 %.0f km/h)\n", velocity, velocity * 3.6);
+    }
+}
+
+
+Adding in a parachute:
+
+public class Main {
+    public static void main(String[] args) {
+        double G = 6.67430e-11;
+        double earthMass = 5.972e24;
+        double earthRadius = 6371000;
+        
+        double rho = 1.225;  
+        double Cd = 0.47;   
+        double area = 3.14;  
+        double mass = 100;   
+        
+        double altitude = 100000; 
+        double velocity = 0;      
+        double time = 0;          
+        double dt = 0.1;          
+
+        System.out.println("time(s)  | altitude(m)  | velocity(m/s)  | drag force(N)  | rhoCurrent (kg/m3 ");
+        System.out.println("----------------------------------------------------------------------");
+
+        while (altitude > 0) {
+            double r = earthRadius + altitude;
+            double rho0 = 1.225; 
+            double H = 8500;    
+            double rhoCurrent = rho0 * Math.exp(-altitude / H);
+            
+            if (altitude < 5000) {
+             area = 50.0;
+            }
+
+            double a_gravity = (G * earthMass) / Math.pow(r, 2);
+           
+
+            // 公式: Fd = 0.5 * rho * v^2 * Cd * A
+            double dragForce = 0.5 * rhoCurrent * Math.pow(velocity, 2) * Cd * area;
+            double a_drag = dragForce / mass; 
+            
+            double a_net = a_gravity - a_drag;
+
+            velocity = velocity + a_net * dt;
+            altitude = altitude - velocity * dt;
+            time += dt;
+
+            if (Math.round(time * 10) % 500 == 0) {
+                System.out.printf("%.1f   | %.1f   | %.2f   |  %.2f   | %.4f \n", time, altitude, velocity, dragForce, rhoCurrent);
+            }
+        }
+        System.out.println("----------------------------------------------------------------");
+        System.out.printf("The object has landed！Final velocity: %.2f m/s (约 %.0f km/h)\n", velocity, velocity * 3.6);
+        
+        if (velocity < 10){
+            System.out.println("mission success!");
+        }
+        else {
+        System.out.println("mission failed, make it happen next time!");
+        }
+    }
+        
+        
+import java.util.ArrayList;
+public class OrbitalDecay{
+    public static double G = 6.67430e-11;
+    public static double M_Earth = 5.972e24;
+    public static double R_Earth = 6371000;
+
+
+public static void main(String[]args){
+    double M_Satelite = 5.00;
+    double A_Satelite = 1;
+    double C_Drag = 2.2;
+    double Altitude = 400000;
+    double R = R_Earth + Altitude;
+    double time = 0;
+    double DistanceTime = 1000;
+
+
+System.out.println ("| Day |  Altitude (km)  |  Velocity (m/s)  |  Density (kg/m3)  |");
+System.out.println ("-----------------------------------------------------------------");
+
+
+while (Altitude > 150000){
+    double rho = findDensity(Altitude);
+    double v = Math.sqrt((G * M_Earth) / R);
+    double dragForce = 0.5 * rho * v * v * C_Drag * A_Satelite;
+    double deltaR = (2 * dragForce * v * DistanceTime) / (M_Satelite * (G * M_Earth / (R * R)));
+
+
+    R -= deltaR;
+    Altitude = R - R_Earth;
+    time += DistanceTime;
+
+
+    if (time % 86400 < DistanceTime){
+        System.out.printf("| %-3.0f  | %-15.6f | %-16.2f | %-10.2e |\n",
+                           time / 86400, Altitude / 1000, v , rho);
+   
+    }  
+}
+System.out.println("-----------------------------------------------------------------");
+System.out.printf("The projected life of orbit is : %.2f days\n" , time / 86400);
+}
+
+
+public static double findDensity(double h) {
+    double altKm = h/1000.0;
+    if (altKm > 150) {
+        return 2.789e-10 * Math.exp(-(altKm - 200)/ 37.5);
+    }
+    else {
+        return 1.225 * Math.exp(-altKm / 8.5);
+    }
+}
+}
+
 
