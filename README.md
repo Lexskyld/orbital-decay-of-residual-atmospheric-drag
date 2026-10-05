@@ -26,6 +26,7 @@ $$k_3 = f\left(t_n + \frac{h}{2}, y_n + \frac{h}{2}k_2\right)$$
 $$k_4 = f(t_n + h, y_n + hk_3)$$
 
 Simpson's rule:
+
 $$y_{n+1} = y_n + \frac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right)$$
 
 $$\text{New Position } (y_{n+1}) = \text{Old Position } (y_n) + h \times \left( \frac{k_1 + 2k_2 + 2k_3 + k_4}{6} \right)$$
