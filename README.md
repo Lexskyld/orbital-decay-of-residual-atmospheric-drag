@@ -14,7 +14,7 @@ stage 4 — Full 3d RK4 vector propagator: built physics engine using J2 perturb
 
 (see "OrbitalDecaySimulator" for all unity assets)
 
-** Main breakthrough with stage 4: originally used  first-order Euler integration, satellite went out of control into deep space. After doing some research online, I understood that the Euler integration method used a simple straight-line guess for each time step, that caused the overshooting on the orbital curve.
+** Main breakthrough with stage 4: originally used  first-order Euler integration to calculate trajectory points of the spacecraft, however it went out of control into deep space. After doing some research online, I understood that the Euler integration method used a simple straight-line guess for each time step, that caused the overshooting on the orbital curve.
 I used 4th-Order Runge-Kutta numerical integrator: 
 
 $$k_1 = f(t_n, y_n)$$
